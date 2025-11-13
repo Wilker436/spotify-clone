@@ -1,0 +1,51 @@
+---
+import LibraryIcon from "../icons/Library.astro";
+import HomeIcon from "../icons/Home.astro";
+import SearchIcon from "../icons/Search.astro";
+import SideMenuItem from "./SideMenuItem.astro";
+import AuthIcon from "../icons/Auth.astro";
+import UserLibrary from "./UserLibrary.astro";
+
+const accessToken = Astro.cookies.get('spotify_access_token')?.value;
+const authUrl = `https://accounts.spotify.com/authorize?client_id=085367c31dee459bafba7b2c3400df48&response_type=code&redirect_uri=http://127.0.0.1:4321/callback&scope=ugc-image-upload user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public user-follow-modify user-follow-read user-read-playback-position user-top-read user-read-recently-played user-library-modify user-library-read user-read-email user-read-private`;
+---
+
+<nav class="flex flex-col flex-1 gap-2 overflow-hidden">
+    <div class="bg-zinc-900 rounded-lg">
+        <ul>
+            {!accessToken ? (
+                <SideMenuItem href={authUrl}>
+                    <AuthIcon />
+                    Autentificar
+                </SideMenuItem>
+            ) : (
+                <SideMenuItem href="/logout">
+                    <AuthIcon />
+                    Cerrar sesión
+                </SideMenuItem>
+            )}
+
+            <SideMenuItem href="/">
+                <HomeIcon />
+                Inicio
+            </SideMenuItem>
+
+            <SideMenuItem href="/search">
+                <SearchIcon />
+                Buscar
+            </SideMenuItem>
+        </ul>
+    </div>
+
+    <div class="bg-zinc-900 rounded-lg flex-1 overflow-y-scroll">
+        <ul>
+            <SideMenuItem href="/library">
+                <LibraryIcon />
+                Tu biblioteca
+            </SideMenuItem>
+        </ul>
+        
+        {/* Mostrar la biblioteca del usuario si está autenticado */}
+        <UserLibrary />
+    </div>
+</nav>

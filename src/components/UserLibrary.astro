@@ -1,0 +1,138 @@
+---
+import { getUserPlaylists, getFollowedArtists, getSavedTracks, getSavedAlbums } from '../utils/spotifyAuth';
+
+const accessToken = Astro.cookies.get('spotify_access_token')?.value;
+
+let playlists = null;
+let followedArtists = null;
+let savedTracks = null;
+let savedAlbums = null;
+
+if (accessToken) {
+  try {
+    // Hacer todas las llamadas en paralelo para mejor performance
+    [playlists, followedArtists, savedTracks, savedAlbums] = await Promise.all([
+      getUserPlaylists(accessToken, 6),
+      getFollowedArtists(accessToken, 6),
+      getSavedTracks(accessToken, 6),
+      getSavedAlbums(accessToken, 6)
+    ]);
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+  }
+}
+---
+
+{accessToken && (
+  <div class="mt-4 space-y-6">
+    {/* Playlists */}
+    {playlists && playlists.items.length > 0 && (
+      <div>
+        <h3 class="text-lg font-semibold text-white mb-3">Playlists</h3>
+        <div class="space-y-2">
+          {playlists.items.slice(0, 4).map((playlist: any) => (
+            <div class="flex items-center gap-3 p-2 rounded hover:bg-zinc-800 cursor-pointer">
+              {playlist.images[0] ? (
+                <img 
+                  src={playlist.images[0].url} 
+                  alt={playlist.name}
+                  class="w-10 h-10 rounded"
+                />
+              ) : (
+                <div class="w-10 h-10 bg-zinc-700 rounded flex items-center justify-center">
+                  <span class="text-white text-xs">🎵</span>
+                </div>
+              )}
+              <div class="flex-1 min-w-0">
+                <p class="text-white text-sm font-medium truncate">{playlist.name}</p>
+                <p class="text-zinc-400 text-xs truncate">
+                  Playlist • {playlist.owner.display_name}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {/* Artistas seguidos */}
+    {followedArtists && followedArtists.artists.items.length > 0 && (
+      <div>
+        <h3 class="text-lg font-semibold text-white mb-3">Artistas</h3>
+        <div class="space-y-2">
+          {followedArtists.artists.items.slice(0, 4).map((artist: any) => (
+            <div class="flex items-center gap-3 p-2 rounded hover:bg-zinc-800 cursor-pointer">
+              {artist.images[0] ? (
+                <img 
+                  src={artist.images[0].url} 
+                  alt={artist.name}
+                  class="w-10 h-10 rounded-full"
+                />
+              ) : (
+                <div class="w-10 h-10 bg-zinc-700 rounded-full flex items-center justify-center">
+                  <span class="text-white text-xs">👤</span>
+                </div>
+              )}
+              <div class="flex-1 min-w-0">
+                <p class="text-white text-sm font-medium truncate">{artist.name}</p>
+                <p class="text-zinc-400 text-xs">Artista</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {/* Álbumes guardados */}
+    {savedAlbums && savedAlbums.items.length > 0 && (
+      <div>
+        <h3 class="text-lg font-semibold text-white mb-3">Álbumes</h3>
+        <div class="space-y-2">
+          {savedAlbums.items.slice(0, 4).map((item: any) => (
+            <div class="flex items-center gap-3 p-2 rounded hover:bg-zinc-800 cursor-pointer">
+              {item.album.images[0] && (
+                <img 
+                  src={item.album.images[0].url} 
+                  alt={item.album.name}
+                  class="w-10 h-10 rounded"
+                />
+              )}
+              <div class="flex-1 min-w-0">
+                <p class="text-white text-sm font-medium truncate">{item.album.name}</p>
+                <p class="text-zinc-400 text-xs truncate">
+                  {item.album.artists.map((artist: any) => artist.name).join(', ')}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {/* Canciones guardadas */}
+    {savedTracks && savedTracks.items.length > 0 && (
+      <div>
+        <h3 class="text-lg font-semibold text-white mb-3">Canciones</h3>
+        <div class="space-y-2">
+          {savedTracks.items.slice(0, 4).map((item: any) => (
+            <div class="flex items-center gap-3 p-2 rounded hover:bg-zinc-800 cursor-pointer">
+              {item.track.album.images[0] && (
+                <img 
+                  src={item.track.album.images[0].url} 
+                  alt={item.track.name}
+                  class="w-10 h-10 rounded"
+                />
+              )}
+              <div class="flex-1 min-w-0">
+                <p class="text-white text-sm font-medium truncate">{item.track.name}</p>
+                <p class="text-zinc-400 text-xs truncate">
+                  {item.track.artists.map((artist: any) => artist.name).join(', ')}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+)}
