@@ -7,6 +7,10 @@ import AsideMenu from "../components/AsideMenu.astro";
 import ClientRouter from "astro/components/ClientRouter.astro";
 import { Player } from "@/components/Player.jsx";
 import type { nan } from "astro:schema";
+import { usePlayerStore } from "@/store/playerStore";
+import { ViewDetails }from "@/components/SongDeteils";
+
+
 ---
 
 <!doctype html>
@@ -28,6 +32,8 @@ import type { nan } from "astro:schema";
 			<main class="[grid-area:main] rounded-lg bg-zinc-900 overflow-y-auto w-full">
 				<slot />
 			</main>
+
+			<ViewDetails client:load transition:name="view-details" transition:persist/>
 			
 			<footer class="[grid-area:player]">
 				<Player client:load transition:name="media-player" transition:persist/>
@@ -42,9 +48,9 @@ import type { nan } from "astro:schema";
 	#app {
 		display: grid;
 		grid-template-areas:
-			"aside main main"
+			"aside main view"
 			"player player player";
-		grid-template-columns: 350px 1fr;
+		grid-template-columns: 350px 1fr auto;
 		grid-template-rows: 1fr auto;
 	}
 </style>
