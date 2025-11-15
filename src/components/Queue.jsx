@@ -51,7 +51,7 @@ export function Queue() {
               <img 
                 src={song.image} 
                 alt={song.title} 
-                className="w-12 h-12 rounded object-cover flex-shrink-0"
+                className="w-12 h-12 rounded object-cover shrink-0"
               />
 
               {/* Información de la canción */}
@@ -68,7 +68,7 @@ export function Queue() {
 
               {/* Duración (si está disponible) */}
               {song.duration && (
-                <span className="text-xs text-gray-400 flex-shrink-0">
+                <span className="text-xs text-gray-400 shrink-0">
                   {formatTime(song.duration)}
                 </span>
               )}

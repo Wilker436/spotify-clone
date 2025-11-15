@@ -1,0 +1,28 @@
+---
+const { searchParams } = Astro.url;
+const token = searchParams.get("token");
+---
+
+<html lang="es">
+  <head>
+    <title>Spotify Auth Success</title>
+    <script type="module">
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get("token");
+
+      if (token) {
+        localStorage.setItem("spotify_token", token);
+        window.location.href = "/";
+      } else {
+        document.body.innerHTML = "<h1>Error: No se recibió token</h1>";
+      }
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <h1>¡Autenticación exitosa!</h1>
+      <p>Tu token es:</p>
+      <code>{token}</code>
+    </noscript>
+  </body>
+</html>

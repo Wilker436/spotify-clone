@@ -1,0 +1,41 @@
+---
+const client_id = "085367c31dee459bafba7b2c3400df48";
+const redirect_uri = "http://127.0.0.1:4321/callback";
+const scopes = [
+  "user-read-playback-state",
+  "user-modify-playback-state",
+  "user-read-currently-playing",
+  "streaming",
+  "user-read-email",
+  "user-read-private",
+  "playlist-read-private",
+  "playlist-read-collaborative",
+].join(" ");
+
+const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${client_id}&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(redirect_uri)}`;
+---
+
+<div id="auth-button">
+  <a id="login-link" href={authUrl} class="flex gap-4 text-zinc-400 hover:text-zinc-100 items-center py-3 px-5 font-medium transition duration-300 hidden">
+    Autentificar
+  </a>
+  <button id="logout-btn" class="flex gap-4 text-zinc-400 hover:text-zinc-100 items-center py-3 px-5 font-medium transition duration-300 hidden">
+    Cerrar sesión
+  </button>
+</div>
+
+<script type="module">
+  const token = localStorage.getItem("spotify_token");
+  const loginLink = document.getElementById("login-link");
+  const logoutBtn = document.getElementById("logout-btn");
+
+  if (token) {
+    logoutBtn.classList.remove("hidden");
+    logoutBtn.onclick = () => {
+      localStorage.removeItem("spotify_token");
+      window.location.reload();
+    };
+  } else {
+    loginLink.classList.remove("hidden");
+  }
+</script>

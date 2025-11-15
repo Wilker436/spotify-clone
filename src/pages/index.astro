@@ -7,6 +7,10 @@ import PlayListItemCard from '@/components/PlayListItemCard.astro';
 
 import Greeting from '@/components/Greeting.svelte'
 
+import { User } from '@/components/User.jsx';
+
+import { PlaylistToApi }from '@/components/PlaylistToApi.jsx';
+
 ---
 
 <Layout title="Spotify Clone">
@@ -14,17 +18,23 @@ import Greeting from '@/components/Greeting.svelte'
 		id="playlist-container"
 		class="relative transition-all duration-1000 bg-green-700"
 	>
-		<!-- pageheader -->
+		<User client:load/>	
+
 		<div class="relative z-10 px-6 p-10">
 			<Greeting/>
 			
 			 <div class="flex flex-wrap mt-6 gap-4">
 				{
 					playlists.map(playlist => <PlayListItemCard playlist={playlist}/>)
-
+/* https://api.spotify.com/v1/me */
 				}
+
+			
 			 </div>
 
+			 <h2 class="text-xl font-semibold mb-4">Tus Playlists de la api</h2>
+
+				<PlaylistToApi client:load/>
 		</div>
 
 		<div class="absolute inset-0 bg-linear-to-t from-zinc-900 via-zinc-900/80"></div>

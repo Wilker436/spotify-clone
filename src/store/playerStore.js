@@ -17,6 +17,10 @@ export const usePlayerStore = create((set, get) => ({
 
     viewQueue: false,
     setViewQueue: (viewQueue) => set({ viewQueue }),
+
+    currentUser: null,
+    setCurrentUser: (user) => set({ currentUser: user }),
+
     
 
     playNextSong: () => {
