@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 
 import { allPlaylists, songs } from "@/lib/data";
 
-import MusicTable from "@/components/MusicTable.astro";
+import MusicTable from "@/components/MusicTable";
 import {CardPlayButton} from "@/components/CardPlayButton";
 
 const { id } = Astro.params;
@@ -74,13 +74,9 @@ const totalMinutes = Math.floor(totalSeconds / 60);
             <CardPlayButton id={id} client:load size="large"/>
         </div>
         
-        
-        <div class="relative z-10 px-6 p-10">
-            <!-- greetings -->
-        </div>
 
         <section class="p-6">
-            <MusicTable songs={playListSongs} />
+            <MusicTable songs={playListSongs} playlist={playlist} client:load/>
         </section>
     </div>
 </Layout>

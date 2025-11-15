@@ -33,8 +33,12 @@ import { ViewDetails }from "@/components/SongDeteils";
 				<slot />
 			</main>
 
-			<ViewDetails client:load transition:name="view-details" transition:persist/>
 			
+			<ViewDetails client:load transition:name="view-details" transition:persist/>
+				
+			
+		
+
 			<footer class="[grid-area:player]">
 				<Player client:load transition:name="media-player" transition:persist/>
 			</footer>
